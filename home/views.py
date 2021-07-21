@@ -5,4 +5,4 @@ from django.shortcuts import render
 # request handler / action
 
 def say_hello(request):
-    return HttpResponse("Hello World!")
+    return render(request, 'hello.html', {'name': 'Wojtek' })

@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-
 django = ">=2.2,<2.3"
+django-debug-toolbar = "*"
 
 [dev-packages]
 pytest = "*"

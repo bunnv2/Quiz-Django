@@ -1,0 +1,4 @@
+[tool.black]
+target-version = ['py39']
+exclude = "migrations"
+line-length = 100

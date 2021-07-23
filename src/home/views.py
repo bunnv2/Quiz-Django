@@ -5,5 +5,17 @@ from django.shortcuts import render
 # request handler / action
 
 
-def say_hello(request):
-    return render(request, "hello.html", {"name": "Wojtek"})
+def home_page(request):
+    return render(request, "home/home.html", {})
+
+
+def register(request):
+    return render(request, "home/register.html", {})
+
+
+def quizes(request):
+    return render(request, "home/quizes.html", {})
+
+
+def contact(request):
+    return render(request, "home/contact.html", {})

@@ -1,0 +1,16 @@
+body {
+    background-color:rgb(255, 255, 255);
+    margin: 2em;
+}
+
+.ui.container > h1 {
+    font-size: 3em;
+    text-align: center;
+    font-weight: normal;
+}
+
+p.info.text {
+    font-size: 1.2em;
+    text-align: center;
+    font-weight: normal;
+}

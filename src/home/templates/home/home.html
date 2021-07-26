@@ -1,44 +1,5 @@
-<!DOCTYPE html>
-{% load staticfiles %}
+{% extends 'home/layouts/default.html' %}
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
-<link rel="stylesheet" type="text/css" href="{% static 'home/app.css' %}">
-<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+{% block title %}HOME{% endblock title %}
 
-<html>
-{% block navbar %}
-    <div class= "ui container">
-        <h1>QUIZZ</h1>
-
-        <h2 class = "ui dividing header"> Czym jest QUIZZ? </h2>
-        <div class="ui four basic buttons">
-            <div class="ui button">Informacje</div>
-            <div class="ui button">Quizy</div>
-            <div class="ui button">Zaloguj</div>
-            <div class="ui button">Kontakt</div>
-        </div>
-
-        {% block register %}
-        {% block quiz %}
-        {% block contact %}
-            <div class="ui segment">
-            <div class="ui two column very relaxed grid">
-                <div class="column">
-                <p class = "info text">{% lorem 1 b random %}</p>
-                </div>
-                <div class="column">
-                <p class = "info text">{% lorem 1 b random %} </p>
-                </div>
-            </div>
-            <div class="ui vertical divider">
-                oraz
-            </div>
-            </div>
-        {% endblock %}
-        {% endblock %}
-        {% endblock %}
-
-    </div>
-{% endblock  %}
-</html>
+{% block content %} <h1 class="ui header">duppa</h1> {% endblock content %}

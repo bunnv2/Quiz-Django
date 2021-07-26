@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-{% extends 'home/home.html' %}
-{% load staticfiles %}
+{% extends 'home/layouts/default.html' %}
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
-<link rel="stylesheet" type="text/css" href="{% static 'home/app.css' %}">
-<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+{% block title %}CONTACT{% endblock title %}
 
-<html>
-    <body>
-        {% block contact %} **kontakt** {% endblock contact %}
-    </body>
-</html>
+{% block content %} **kontakt** {% endblock %}
+

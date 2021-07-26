@@ -23,8 +23,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("__debug__/", include(debug_toolbar.urls)),
     # api paths
-    path("", include("home.urls")),
-    path("register/", include("home.urls")),
-    path("quizes/", include("home.urls")),
-    path("contact/", include("home.urls")),
+    path("", include(("home.urls", "home"))),
 ]

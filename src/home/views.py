@@ -16,7 +16,3 @@ def register(request):
 
 def quizes(request):
     return render(request, "home/quizes.html", {})
-
-
-def contact(request):
-    return render(request, "home/contact.html", {})

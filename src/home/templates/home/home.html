@@ -2,4 +2,18 @@
 
 {% block title %}HOME{% endblock title %}
 
-{% block content %} <h1 class="ui header">duppa</h1> {% endblock content %}
+{% block content %}
+    <div class="ui segment">
+    <div class="ui two column very relaxed grid">
+    <div class="column">
+        <p>{% lorem 1 b random %}</p>
+    </div>
+    <div class="column">
+        <p>{% lorem 1 b random %}</p>
+    </div>
+    </div>
+    <div class="ui vertical divider">
+    and
+    </div>
+    </div>
+{% endblock content %}

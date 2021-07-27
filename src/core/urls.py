@@ -24,4 +24,5 @@ urlpatterns = [
     path("__debug__/", include(debug_toolbar.urls)),
     # api paths
     path("", include(("home.urls", "home"))),
+    path("", include(("account.urls", "account"))),
 ]

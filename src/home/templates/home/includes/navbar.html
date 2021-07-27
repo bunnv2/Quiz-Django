@@ -1,9 +1,19 @@
 <h1>QUIZZ</h1>
 
-{% comment %} {% if request.user %}{% endif %} {% endcomment %}
-<h2 class = "ui dividing header"> Witaj {{request.user.username}} </h2>
-<div class="ui four basic buttons">
-    <a class="ui button" href="{% url 'home:hello' %}">Informacje</a>
+{% if request.user.is_authenticated %}
+    <h2 class="ui dividing header"> Witaj, {{request.user.username}}! </h2>
+{% else %}
+    <h2 class="ui dividing header"> Zaloguj się, by być cool! </h2>
+{% endif %}
+<div class="ui three basic buttons">
+    <a class="ui button" href="{% url 'home:home' %}">Informacje</a>
     <a class="ui button" href="{% url 'home:quizes' %}"> Quizy</a>
-    <a class="ui button" href="{% url 'home:register' %}"> Zaloguj</a>
+
+    {% if request.user.is_authenticated %}
+        <a class="ui button" href="{% url 'account:log_off' %}">
+            Wyloguj
+        </a>
+    {% else %}
+        <a class="ui button" href="{% url 'account:log_in' %}"> Zaloguj</a>
+    {% endif %}
 </div>

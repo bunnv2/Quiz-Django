@@ -14,3 +14,19 @@ p.info.text {
     text-align: center;
     font-weight: normal;
 }
+/* ---FOOOTER--- */
+footer {
+    bottom:0;
+
+}
+.Aligner {
+    display: flex;
+    justify-content: center;
+}
+.ui.horizantional.list.centered {
+    text-align: justify;
+    width: auto;
+    justify-items: center;
+    position: fixed;
+    display: flex;
+}

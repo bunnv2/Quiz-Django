@@ -1,0 +1,26 @@
+{% extends 'home/layouts/default.html' %}
+
+{% block title %}REGISTER{% endblock title %}
+
+{% block content %}
+
+    <div class="ui placeholder segment">
+        <div class="ui two column very relaxed stackable grid">
+            <div class="column">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="ui button" type="submit">Zaloguj</button>
+                </form>
+            </div>
+            <div class="middle aligned column">
+                <a class="ui big button" href="{% url 'account:signup' %}">
+                    <i class="signup icon"></i>
+                    Zarejestruj
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

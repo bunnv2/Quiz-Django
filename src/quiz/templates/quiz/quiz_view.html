@@ -1,0 +1,15 @@
+{% extends 'home/layouts/default.html' %}
+
+{% block title %}QUIZ{% endblock title %}
+
+{% block content %}
+    <h1>{{ quiz.title }}</h1>
+    {% for question in questions %}
+        <h2> {{question.question}}: </h2>
+        {% for answer in question.get_mixed_answers%}
+            <div class="ui segment">{{answer}}</div>
+        {% endfor %}
+        <div class="ui divider"></div>
+    {% endfor %}
+{% endblock %}
+

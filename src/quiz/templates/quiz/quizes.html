@@ -3,16 +3,17 @@
 {% block title %}QUIZES{% endblock title %}
 
 {% block content %}
-    <a class="ui card" href="http://www.dog.com">
-        <div class="content">
-            <div class="header">Nazwa quizu</div>
-            <div class="meta">
-                <span class="category">Kategoria</span>
+    {% for quiz in quizes %}
+        <a class="ui card" href="{% url 'quiz:quiz' quiz.id %}">
+            <div class="content">
+                <div class="header">{{ quiz.title }}</div>
+                <div class="meta">
+                    <span class="category">Próg procentowy zdania testu: {{ quiz.required_score_to_pass }}%</span>
+                </div>
+                <div class="description">
+                    <p>Czas na wykonanie quizu: {{ quiz.time}}s.</p>
+                </div>
             </div>
-            <div class="description">
-                <p>opis quizu</p>
-            </div>
-        </div>
-    </a>
+        </a>
+    {% endfor %}
 {% endblock %}
-

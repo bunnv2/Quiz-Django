@@ -30,6 +30,8 @@ class Question(models.Model):
         Quiz,
         on_delete=models.CASCADE,
         verbose_name="Quiz",
+        related_name="questions",
+        related_query_name="question",
     )
     question = models.CharField(
         max_length=254,
@@ -53,7 +55,7 @@ class Question(models.Model):
         item_list = list(answers.items())
         random.shuffle(item_list)
         answers = dict(item_list)
-        return answers
+        return answers.values()
 
     def is_answer_correct(answer_id: int):
         return answer_id == 0

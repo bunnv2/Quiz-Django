@@ -54,10 +54,9 @@ class Question(models.Model):
 
         item_list = list(answers.items())
         random.shuffle(item_list)
-        answers = dict(item_list)
-        return answers.values()
+        return dict(item_list)
 
-    def is_answer_correct(answer_id: int):
+    def is_answer_correct(self, answer_id: int):
         return answer_id == 0
 
     def __str__(self):

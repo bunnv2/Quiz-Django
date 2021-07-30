@@ -3,17 +3,30 @@
 {% block title %}QUIZES{% endblock title %}
 
 {% block content %}
-    {% for quiz in quizes %}
-        <a class="ui card" href="{% url 'quiz:quiz' quiz.id %}">
+    {% if request.user.is_authenticated %}
+        {% for quiz in quizes %}
+            <a class="ui card" href="{% url 'quiz:quiz' quiz.id %}">
+                <div class="content">
+                    <div class="header">{{ quiz.title }}</div>
+                    <div class="meta">
+                        <span class="category">Próg procentowy zdania testu: {{ quiz.required_score_to_pass }}%</span>
+                    </div>
+                    <div class="description">
+                        <p>Czas na wykonanie quizu: {{ quiz.time}}s.</p>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+
+    {% else %}
+        <div class="ui icon message">
+            <i class="bell icon"></i>
             <div class="content">
-                <div class="header">{{ quiz.title }}</div>
-                <div class="meta">
-                    <span class="category">Próg procentowy zdania testu: {{ quiz.required_score_to_pass }}%</span>
+                <div class="header">
+                Nie można wyświetlić quizów
                 </div>
-                <div class="description">
-                    <p>Czas na wykonanie quizu: {{ quiz.time}}s.</p>
-                </div>
+                <p>Musisz się najpierw zalogować, by mieć dostęp do quizów.</p>
             </div>
-        </a>
-    {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

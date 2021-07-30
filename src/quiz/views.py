@@ -21,5 +21,14 @@ def quiz_view(request, quiz_id):
         "quiz": quiz,
         "questions": questions,
     }
-    print(quiz.questions)
+
+    if request.method != "POST":
+        return render(request, "quiz/quiz_view.html", context)
+
+    for question in questions:
+        answer = request.POST.get(f"question_{question.id}", [None])[0]
+        if not answer or not question.is_answer_correct(int(answer)):
+            print(f"do better: {question.id}")
+            continue
+        print(f"good job!: {question.id}")
     return render(request, "quiz/quiz_view.html", context)

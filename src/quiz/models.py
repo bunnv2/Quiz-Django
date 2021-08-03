@@ -21,6 +21,12 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
+    def is_quiz_passed(self, points):
+        if points >= self.required_score_to_pass:
+            return True
+        else:
+            return False
+
     class Meta:
         verbose_name_plural = "Quizes"
 
@@ -57,7 +63,10 @@ class Question(models.Model):
         return dict(item_list)
 
     def is_answer_correct(self, answer_id: int):
-        return answer_id == 0
+        return answer_id == self.get_correct_answer()
+
+    def get_correct_answer(self):
+        return 0
 
     def __str__(self):
         return "{} {}".format(self.quiz.title, self.question)

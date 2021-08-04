@@ -7,46 +7,30 @@
 {% block content %}
     {% if request.user.is_authenticated %}
         <h1>{{ quiz.title }}</h1>
-        {% if passed %}
-            <div class="ui placeholder green segment">
-                <div class="ui icon header">
-                    <i class="smile outline icon"></i>
-                    <div class="ui container">Gratulacje, zdałeś test!</div>
-                    <h2> Zdobyłeś {{results}}%</h2>
-                </div>
-                <a class="ui primary button" href="{% url 'quiz:quizes' %}">Wróć do wyboru quizów.</a>
-            </div>
+        {% if request.method == 'POST' %}
+            {% include  "quiz/includes/results_view.html" %}
         {% else %}
-            <div class="ui placeholder red segment">
-                <div class="ui icon header">
-                    <i class="frown outline icon"></i>
-                    <h2>Nie zdałes testu, l2p.<h2>
-                    <div class="ui container">Zdobyłeś {{results}}%</div>
-                </div>
-                <a class="ui primary button" href="{% url 'quiz:quizes' %}">Wróć do wyboru quizów.</a>
-            </div>
-        {% endif %}
-        <form class="ui form" method="post">
+            <form class="ui form" method="post">
 
-            {% csrf_token %}
+                {% csrf_token %}
 
-            {% for question in questions %}
-                <h2> {{question.question}}: </h2>
-                <div class="inline fields">
-                    {% for idx, answer in question.get_mixed_answers.items%}
-                        <div class=" {% if question.get_correct_answer == idx%}success {% elif answers_selected|dict_key:question.id == idx %}error{% endif %} field">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="question_{{ question.id }}" value="{{ idx }}" {% if answers_selected|dict_key:question.id == idx %}checked="true"{% endif %}>
-                                <label>{{ answer }}</label>
+                {% for question in questions %}
+                    <h2> {{question.question}}: </h2>
+                    <div class="inline fields">
+                        {% for idx, answer in question.get_mixed_answers.items%}
+                            <div class="field">
+                                <div class="ui medium radio checkbox">
+                                    <input type="radio" name="question_{{ question.id }}" value="{{ idx }}" {% if answers_selected|dict_key:question.id == idx %}checked="true"{% endif %}>
+                                    <label>{{ answer }}</label>
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class="ui divider"></div>
-            {% endfor %}
-            <button class="ui primary submit button" type="submit">Zatwierdź</button>
-        </form>
-
+                        {% endfor %}
+                    </div>
+                    <div class="ui divider"></div>
+                {% endfor %}
+                <button class="ui primary submit button" type="submit">Zatwierdź</button>
+            </form>
+        {% endif %}
     {% else %}
         <div class="ui icon message">
             <i class="bell icon"></i>

@@ -47,4 +47,4 @@ def quiz_view(request, quiz_id):
     context["results"] = results / questions.count() * 100
     context["passed"] = quiz.is_quiz_passed(context["results"])
     context["questions"] = questions
-    return render(request, "quiz/quiz_view.html", context)
+    return render(request, "quiz/results_view.html", context)

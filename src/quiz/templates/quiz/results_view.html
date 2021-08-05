@@ -5,21 +5,35 @@
 {% block title %}QUIZES{% endblock title %}
 
 {% block content %}
-    {% if passed %}
-        <div class="ui placeholder green segment">
-            <div class="ui icon header">
-                <i class="smile outline icon"></i>
-                <div class="ui container">Gratulacje, zdałeś test!</div>
-                <h2> Zdobyłeś {{results}}%</h2>
+    {% if required_time %}
+        {% if passed %}
+            <div class="ui placeholder green segment">
+                <div class="ui icon header">
+                    <i class="smile outline icon"></i>
+                    <div class="ui container">Gratulacje, zdałeś test!</div>
+                    <h2> Zdobyłeś {{results}}%</h2>
+                    <h3> Quiz ukończyleś w {{delta}}</h3>
+                </div>
+                <a class="ui primary button" href="{% url 'quiz:quizes' %}">Wróć do wyboru quizów.</a>
             </div>
-            <a class="ui primary button" href="{% url 'quiz:quizes' %}">Wróć do wyboru quizów.</a>
-        </div>
+        {% else %}
+            <div class="ui placeholder red segment">
+                <div class="ui icon header">
+                    <i class="frown outline icon"></i>
+                    <h2>Nie zdałes testu, l2p.<h2>
+                    <div class="ui container">Zdobyłeś {{results}}%</div>
+                    <h3> Quiz ukończyleś w {{ delta }}s.</h3>
+                </div>
+                <a class="ui primary button" href="{% url 'quiz:quizes' %}">Wróć do wyboru quizów.</a>
+            </div>
+        {% endif %}
     {% else %}
         <div class="ui placeholder red segment">
             <div class="ui icon header">
-                <i class="frown outline icon"></i>
-                <h2>Nie zdałes testu, l2p.<h2>
+                <i class="clock outline icon"></i>
+                <h2>Nie wystarczyło ci czasu..</h2>
                 <div class="ui container">Zdobyłeś {{results}}%</div>
+                <h3> Quiz ukończyleś w {{ delta }}s.</h3>
             </div>
             <a class="ui primary button" href="{% url 'quiz:quizes' %}">Wróć do wyboru quizów.</a>
         </div>

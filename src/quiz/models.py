@@ -1,5 +1,6 @@
 import random
 
+from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -26,6 +27,11 @@ class Quiz(models.Model):
             return True
         else:
             return False
+
+    def is_required_time(self, seconds):
+        if seconds >= self.time:
+            return False
+        return True
 
     class Meta:
         verbose_name_plural = "Quizes"
@@ -70,3 +76,23 @@ class Question(models.Model):
 
     def __str__(self):
         return "{} {}".format(self.quiz.title, self.question)
+
+
+class QuizResults(models.Model):
+    quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.CASCADE,
+        verbose_name="Quiz",
+    )
+    user = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        verbose_name="Użytkownik",
+    )
+    quiz_start = models.DateTimeField(auto_now=False, auto_now_add=False)
+    quiz_end = models.DateTimeField(auto_now=False, auto_now_add=False, null=True)
+    results = models.IntegerField(
+        verbose_name="Liczba punktów",
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        null=True,
+    )

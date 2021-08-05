@@ -1,0 +1,28 @@
+{% extends 'home/layouts/default.html' %}
+
+
+{% block title %}QUIZ{% endblock title %}
+
+{% block content %}
+    <div class="ui divider"></div>
+    <h2 class="ui header"> KREATOR QUIZU </h1>
+    <form class="ui form" method='post'>
+        {% csrf_token %}
+
+        <div class="field">
+            <label>Tytuł quizu</label>
+            <input type="text" name="quiz-title" placeholder="Tytuł">
+        </div>
+        <div class="field">
+            <label>Czas na wykonanie quizu</label>
+            <input type="number" name="quiz-time" placeholder="Czas w sekundach">
+        </div>
+        <div class="field">
+            <label>Wynik procentowy do zdania</label>
+            <input type="number" name="quiz-score" placeholder="Próg procentowy">
+        </div>
+        <a class="ui button" href="{% url 'quiz:que-creator' %}">
+            <button class="ui button" type="submit">Zatwierdź</button>
+        </a>
+    </form>
+{% endblock content%}

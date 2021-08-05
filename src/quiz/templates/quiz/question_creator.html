@@ -1,0 +1,43 @@
+{% extends 'home/layouts/default.html' %}
+
+
+{% block title %}QUIZ{% endblock title %}
+
+{% block content %}
+    <div class="ui divider"></div>
+    <h2 class="ui header"> Dodaj pytania do! "" </h1>
+    <form class="ui form" method='post'>
+        {% csrf_token %}
+        <div class="field">
+            <label>Quiz</label>
+            <select class ="ui serach dropdown" autocomplete="on">
+                <option value="{new_quiz.id}" selected="selected"> {{ new_quiz.title }} </option>
+                {% for quiz in quizes%}
+                    <option value="{{quiz.id}}">{{ quiz.title }}</option>
+                {% endfor %}
+            </select
+        </div>
+        <div class="field">
+            <label>Treść pytania</label>
+            <input type="text" name="question" placeholder="Tytuł">
+        </div>
+        <div class="field">
+            <label>Poprawna odpowiedź</label>
+            <input type="text" name="correct_answer" placeholder="Poprawna odpowiedź">
+        </div>
+        <div class="field">
+            <label>Odpowiedź 1</label>
+            <input type="text" name="answer_one" placeholder="Odpowiedź 1">
+        </div>
+        <div class="field">
+            <label>Odpowiedź 2</label>
+            <input type="text" name="answer_two" placeholder="Odpowiedź 2">
+        </div>
+        <div class="field">
+            <label>Odpowiedź 3</label>
+            <input type="text" name="answer_three" placeholder="Odpowiedź 3">
+        </div>
+
+        <button class="ui button" type="submit">Zatwierdź</button>
+    </form>
+{% endblock content%}

@@ -69,3 +69,30 @@ def quiz_view(request, quiz_id):
     context["passed"] = quiz.is_quiz_passed(context["results"])
     context["questions"] = questions
     return render(request, "quiz/results_view.html", context)
+
+
+def quiz_creator(request):
+
+    if request.method != "POST":
+        return render(request, "quiz/quiz_creator.html")
+
+    title = request.POST.get(f"quiz-title")
+    time = request.POST.get(f"quiz-time")
+    score = request.POST.get(f"quiz-score")
+
+    new_quiz, created = Quiz.objects.get_or_create(
+        title=title,
+        defaults={
+            "time": time,
+            "required_score_to_pass": score,
+        },
+    )
+    quizes = Quiz.objects.exclude(title=title)
+    # TODO: THROW AN EXCEPTION FOR ALREADY EXISTING QUIZ
+
+    context = {
+        "new_quiz": new_quiz,
+        "quizes": quizes,
+    }
+
+    return render(request, "quiz/question_creator.html", context)

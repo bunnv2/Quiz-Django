@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from time import time
 
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render
@@ -22,7 +23,6 @@ def quiz_view(request, quiz_id):
         "quiz": quiz,
         "questions": questions,
     }
-
     if request.method != "POST":
         session, created = QuizResults.objects.get_or_create(
             quiz=quiz,
@@ -30,7 +30,6 @@ def quiz_view(request, quiz_id):
             quiz_end=None,
             defaults={"quiz_start": datetime.now()},
         )
-
         return render(request, "quiz/quiz_view.html", context)
 
     results = 0
@@ -60,7 +59,11 @@ def quiz_view(request, quiz_id):
         results=quiz_result,
     )
 
-    # dt =
+    obj = QuizResults.objects.latest("quiz_start")
+    delta = obj.quiz_end - obj.quiz_start
+
+    context["required_time"] = quiz.is_required_time(delta.seconds)
+    context["delta"] = delta.seconds
     context["answers_selected"] = answers_selected
     context["results"] = quiz_result
     context["passed"] = quiz.is_quiz_passed(context["results"])

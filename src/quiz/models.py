@@ -28,6 +28,11 @@ class Quiz(models.Model):
         else:
             return False
 
+    def is_required_time(self, seconds):
+        if seconds >= self.time:
+            return False
+        return True
+
     class Meta:
         verbose_name_plural = "Quizes"
 

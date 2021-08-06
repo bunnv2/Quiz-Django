@@ -96,3 +96,6 @@ class QuizResults(models.Model):
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         null=True,
     )
+
+    def get_results_for_display(self):
+        pass

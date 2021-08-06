@@ -5,13 +5,13 @@
 
 {% block content %}
     <div class="ui divider"></div>
-    <h2 class="ui header"> Dodaj pytania do! "" </h1>
+    <h2 class="ui header"> KREATOR PYTAŃ </h1>
     <form class="ui form" method='post'>
         {% csrf_token %}
         <div class="field">
             <label>Quiz</label>
-            <select class ="ui serach dropdown" autocomplete="on">
-                <option value="{new_quiz.id}" selected="selected"> {{ new_quiz.title }} </option>
+            <select class ="ui search dropdown" autocomplete="on" name="dropdown">
+                <option value="{{ new_quiz.id }}" selected="selected"> {{ new_quiz.title }} </option>
                 {% for quiz in quizes%}
                     <option value="{{quiz.id}}">{{ quiz.title }}</option>
                 {% endfor %}

@@ -5,39 +5,26 @@
 
 {% block content %}
     <div class="ui divider"></div>
-    <h2 class="ui header"> KREATOR PYTAŃ </h1>
+    <h2 class="ui header"> KREATOR PYTAŃ - {{quiz.title}}</h1>
     <form class="ui form" method='post'>
         {% csrf_token %}
-        <div class="field">
-            <label>Quiz</label>
-            <select class ="ui search dropdown" autocomplete="on" name="dropdown">
-                <option value="{{ new_quiz.id }}" selected="selected"> {{ new_quiz.title }} </option>
-                {% for quiz in quizes%}
-                    <option value="{{quiz.id}}">{{ quiz.title }}</option>
-                {% endfor %}
-            </select
-        </div>
-        <div class="field">
-            <label>Treść pytania</label>
-            <input type="text" name="question" placeholder="Tytuł">
-        </div>
-        <div class="field">
-            <label>Poprawna odpowiedź</label>
-            <input type="text" name="correct_answer" placeholder="Poprawna odpowiedź">
-        </div>
-        <div class="field">
-            <label>Odpowiedź 1</label>
-            <input type="text" name="answer_one" placeholder="Odpowiedź 1">
-        </div>
-        <div class="field">
-            <label>Odpowiedź 2</label>
-            <input type="text" name="answer_two" placeholder="Odpowiedź 2">
-        </div>
-        <div class="field">
-            <label>Odpowiedź 3</label>
-            <input type="text" name="answer_three" placeholder="Odpowiedź 3">
-        </div>
-
+        {{form}}
         <button class="ui button" type="submit">Zatwierdź</button>
     </form>
-{% endblock content%}
+
+    <div class="ui divider"></div>
+        <h3 class="ui header">Aktualne pytania dla quizu:</h3>
+        <ol class="ui list">
+            {% for question in questions %}
+                <li>{{question.question}}
+                    <ol class="ui list">
+                        <li value="-" style="color: green;">{{ question.correct_answer}} </li>
+                        <li value="-">{{ question.answer_one}} </li>
+                        <li value="-">{{ question.answer_two}} </li>
+                        <li value="-">{{ question.answer_three}} </li>
+                    </ol>
+                </li>
+            {% endfor %}
+        </ol>
+
+{% endblock content %}

@@ -11,7 +11,7 @@
                 <div class="ui icon header">
                     <i class="smile outline icon"></i>
                     <div class="ui container">Gratulacje, zdałeś test!</div>
-                    <h2> Zdobyłeś {{results}}%</h2>
+                    <h2> Zdobyłeś {{results.results}}%</h2>
                     <h3> Quiz ukończyleś w {{delta}}</h3>
                 </div>
                 <a class="ui primary button" href="{% url 'quiz:quizes' %}">Wróć do wyboru quizów.</a>
@@ -22,7 +22,7 @@
                     <i class="frown outline icon"></i>
                     <h2>Nie zdałes testu, l2p.<h2>
                     <div class="ui container">Zdobyłeś {{results.results}}%</div>
-                    <h3> Quiz ukończyleś w {{ results.quiz_end|timesince:results.quiz_start }}.</h3>
+                    <h3> Quiz ukończyleś w {{ delta }}s.</h3>
                 </div>
                 <a class="ui primary button" href="{% url 'quiz:quizes' %}">Wróć do wyboru quizów.</a>
             </div>

@@ -1,11 +1,12 @@
 from datetime import datetime
-from re import template
 
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views import View
 
+from .forms import QuestionCreationForm, QuizCreationForm
 from .models import Question, Quiz, QuizResults
 
 
@@ -67,7 +68,10 @@ class QuizView(View):
             answers_correct[question.id] = answer
             results += 1
 
-        quiz_result = results / questions.count() * 100
+        if questions.count() > 0:
+            quiz_result = results / questions.count() * 100
+        else:
+            quiz_result = 0
 
         obj = QuizResults.objects.get(quiz=quiz, user=request.user, quiz_end=None)
         obj.quiz_end = timezone.now()
@@ -87,41 +91,48 @@ class QuizView(View):
 
 class QuizCreatorView(View):
     template_name = "quiz/quiz_creator.html"
-    second_template_name = "quiz/question_creator.html"
+    form_class = QuizCreationForm
 
     def get(self, request):
-        return render(request, self.template_name)
+        return render(request, self.template_name, {"form": self.form_class()})
 
     def post(self, request):
-        title = request.POST.get(f"quiz-title")
-        time = request.POST.get(f"quiz-time")
-        score = request.POST.get(f"quiz-score")
-        new_quiz, created = Quiz.objects.get_or_create(
-            title=title,
-            defaults={
-                "time": time,
-                "required_score_to_pass": score,
+        form = self.form_class(request.POST)
+
+        if not form.is_valid():
+            return render(request, self.template_name, {"form": form})
+
+        quiz = form.save()
+
+        return redirect(quiz.get_add_question_url())
+
+
+class QuestionCreatorView(View):
+    template_name = "quiz/question_creator.html"
+    form_class = QuestionCreationForm
+
+    def get(self, request, quiz_id):
+        quiz = get_object_or_404(Quiz, pk=quiz_id)
+        questions = Question.objects.filter(quiz=quiz)
+
+        return render(
+            request,
+            self.template_name,
+            {
+                "form": self.form_class(),
+                "quiz": quiz,
+                "questions": questions,
             },
         )
-        quizes = Quiz.objects.exclude(title=title)
 
-        # TODO: THROW AN EXCEPTION FOR ALREADY EXISTING QUIZ
-        #       adding questions, and answers, after adding - add again
+    def post(self, request, quiz_id):
+        quiz = get_object_or_404(Quiz, pk=quiz_id)
+        form = self.form_class(request.POST)
 
-        # new_question = Question (
-        #     quiz=Quiz.objects.get(id=request.POST.get(f"dropdown")),
-        #     question=request.POST.get(f"question"),
-        #     correct_answer=request.POST.get(f"correct_answer"),
-        #     answer_one=request.POST.get(f"answer_one"),
-        #     answer_two=request.POST.get(f"answer_two"),
-        #     answer_three=request.POST.get(f"answer_three"),
-        # )
+        if not form.is_valid():
+            return render(request, self.template_name, {"form": form})
 
-        # new_question.save()
-
-        context = {
-            "new_quiz": new_quiz,
-            "quizes": quizes,
-        }
-
-        return render(request, self.second_template_name, context)
+        question = form.save(commit=False)
+        question.quiz = quiz
+        question.save()
+        return redirect(quiz.get_add_question_url())

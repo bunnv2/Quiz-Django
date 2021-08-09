@@ -3,12 +3,14 @@ import random
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.urls import reverse
 
 
 class Quiz(models.Model):
     title = models.CharField(
         max_length=255,
         verbose_name="Tytuł",
+        unique=True,
     )
     time = models.IntegerField(
         validators=[MinValueValidator(0)],
@@ -32,6 +34,12 @@ class Quiz(models.Model):
         if seconds >= self.time:
             return False
         return True
+
+    def get_absolute_url(self):
+        return reverse("quiz:quiz", kwargs={"quiz_id": self.pk})
+
+    def get_add_question_url(self):
+        return reverse("quiz:question-creator", kwargs={"quiz_id": self.pk})
 
     class Meta:
         verbose_name_plural = "Quizes"

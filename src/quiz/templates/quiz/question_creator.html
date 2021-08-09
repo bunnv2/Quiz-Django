@@ -1,0 +1,30 @@
+{% extends 'home/layouts/default.html' %}
+
+
+{% block title %}QUIZ{% endblock title %}
+
+{% block content %}
+    <div class="ui divider"></div>
+    <h2 class="ui header"> KREATOR PYTAŃ - {{quiz.title}}</h1>
+    <form class="ui form" method='post'>
+        {% csrf_token %}
+        {{form}}
+        <button class="ui button" type="submit">Zatwierdź</button>
+    </form>
+
+    <div class="ui divider"></div>
+        <h3 class="ui header">Aktualne pytania dla quizu:</h3>
+        <ol class="ui list">
+            {% for question in questions %}
+                <li>{{question.question}}
+                    <ol class="ui list">
+                        <li value="-" style="color: green;">{{ question.correct_answer}} </li>
+                        <li value="-">{{ question.answer_one}} </li>
+                        <li value="-">{{ question.answer_two}} </li>
+                        <li value="-">{{ question.answer_three}} </li>
+                    </ol>
+                </li>
+            {% endfor %}
+        </ol>
+
+{% endblock content %}

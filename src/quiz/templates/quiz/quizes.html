@@ -3,20 +3,24 @@
 {% block title %}QUIZES{% endblock title %}
 
 {% block content %}
+<a class="tiny ui inverted button" href="{% url 'quiz:creator' %}"><i class="ui plus icon"></i></a>
+    <div class="ui divider"></div>
     {% if request.user.is_authenticated %}
-        {% for quiz in quizes %}
-            <a class="ui card" href="{% url 'quiz:quiz' quiz.id %}">
-                <div class="content">
-                    <div class="header">{{ quiz.title }}</div>
-                    <div class="meta">
-                        <span class="category">Próg procentowy zdania testu: {{ quiz.required_score_to_pass }}%</span>
-                    </div>
-                    <div class="description">
-                        <p>Czas na wykonanie quizu: {{quiz.time}} s.</p>
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
+        <div class="ui three cards">
+            {% for quiz in quizes %}
+                    <a class="ui  card" href="{{quiz.get_absolute_url}}">
+                        <div class="content">
+                            <div class="header">{{ quiz.title }}</div>
+                            <div class="meta">
+                                <span class="category">Próg procentowy zdania testu: {{ quiz.required_score_to_pass }}%</span>
+                            </div>
+                            <div class="description">
+                                <p>Czas na wykonanie quizu: {{quiz.time}} s.</p>
+                            </div>
+                        </div>
+                    </a>
+            {% endfor %}
+        </div>
 
     {% else %}
         <div class="ui icon message">

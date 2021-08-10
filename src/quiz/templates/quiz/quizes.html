@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="ui secondary tiny menu">
-        <a class="small item" href='{% url 'quiz:creator' %}'>
+        <a class="ui tertiary secondary small button" href='{% url 'quiz:creator' %}'>
             <i class="plus icon"></i>
             DODAJ QUIZ
         </a>
@@ -13,7 +13,8 @@
     {% if request.user.is_authenticated %}
         <div class="ui three cards">
             {% for quiz in quizes %}
-                    <a class="ui  card" href="{{quiz.get_absolute_url}}">
+                {% if quiz.is_published == True %}
+                    <a class="ui card" href="{{quiz.get_absolute_url}}">
                         <div class="content">
                             <div class="header">{{ quiz.title }}</div>
                             <div class="meta">
@@ -21,9 +22,29 @@
                             </div>
                             <div class="description">
                                 <p>Czas na wykonanie quizu: {{quiz.time}} s.</p>
+                                <p>Autor: {{quiz.author}}</p>
                             </div>
                         </div>
                     </a>
+                {% else %}
+                    <a class="ui red card" href="{{quiz.get_absolute_url}}">
+                        <div class="content">
+                            <div class="header">{{ quiz.title }}</div>
+                            <div class="meta">
+                                <span class="category">Próg procentowy zdania testu: {{ quiz.required_score_to_pass }}%</span>
+                            </div>
+                            <div class="description">
+                                <p>Czas na wykonanie quizu: {{quiz.time}} s.</p>
+                                <p>Autor: {{quiz.author}}</p>
+                            </div>
+                            <div class="extra content">
+                                <div class="right floated author">
+                                    <i class="flag outline icon"></i> Nieopublikowany
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
             {% endfor %}
         </div>
     {% else %}

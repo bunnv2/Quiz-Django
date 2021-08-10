@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views import View
@@ -14,7 +15,14 @@ class QuizListView(View):
     template_name = "quiz/quizes.html"
 
     def get(self, request):
-        quizes = Quiz.objects.all()
+        if not request.user.is_authenticated:
+            return render(request, "quiz/quizes.html")
+
+        quizes = Quiz.objects.filter(Q(author=request.user) | Q(is_published=True))
+
+        if request.user.is_superuser:
+            quizes = Quiz.objects.all()
+
         context = {
             "quizes": quizes,
         }
@@ -26,6 +34,10 @@ class QuizView(View):
     second_template_view = "quiz/results_view.html"
 
     def get(self, request, quiz_id):
+        # View quiz questions and start timer
+        if not request.user.is_authenticated:
+            return render(request, "quiz/quizes.html")
+
         quiz = get_object_or_404(Quiz, pk=quiz_id)
         questions = Question.objects.filter(quiz=quiz)
         context = {
@@ -41,13 +53,27 @@ class QuizView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, quiz_id):
+        # Check if answers are correct, sum time and display results and other statistics
+
         quiz = get_object_or_404(Quiz, pk=quiz_id)
+
+        if "share" in request.POST:
+
+            if quiz.is_published == False:
+                quiz.is_published = True
+            else:
+                quiz.is_published = False
+
+            quiz.save()
+            return redirect("quiz:quizes")
+
         questions = Question.objects.filter(quiz=quiz)
         context = {
             "quiz": quiz,
             "questions": questions,
         }
 
+        # elif "submit" in request.POST:
         results = 0
         answers_selected = {}
         answers_correct = {}
@@ -94,6 +120,8 @@ class QuizCreatorView(View):
     form_class = QuizCreationForm
 
     def get(self, request):
+        if not request.user.is_authenticated:
+            return render(request, "quiz/quizes.html")
         return render(request, self.template_name, {"form": self.form_class()})
 
     def post(self, request):
@@ -102,7 +130,9 @@ class QuizCreatorView(View):
         if not form.is_valid():
             return render(request, self.template_name, {"form": form})
 
-        quiz = form.save()
+        quiz = form.save(commit=False)
+        quiz.author = request.user
+        quiz.save()
 
         return redirect(quiz.get_add_question_url())
 

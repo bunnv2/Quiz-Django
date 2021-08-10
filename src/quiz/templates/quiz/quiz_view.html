@@ -6,10 +6,16 @@
 
 {% block content %}
     {% if request.user.is_authenticated %}
-        <h1>{{ quiz.title }}</h1>
         {% if request.method == 'POST' %}
             {% include  "quiz/includes/results_view.html" %}
         {% else %}
+            <div class="ui secondary tiny menu">
+                <a class="small item" href='{% url 'quiz:question-creator' quiz.id %}'>
+                    <i class="plus icon"></i>
+                    DODAJ PYTANIE
+                </a>
+            </div>
+            <h1>{{ quiz.title }}</h1>
             <form class="ui form" method="post">
 
                 {% csrf_token %}

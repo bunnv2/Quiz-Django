@@ -10,10 +10,19 @@
             {% include  "quiz/includes/results_view.html" %}
         {% else %}
             <div class="ui secondary tiny menu">
-                <a class="small item" href='{% url 'quiz:question-creator' quiz.id %}'>
+                <a class="ui tertiary secondary small button" href='{% url 'quiz:question-creator' quiz.id %}'>
                     <i class="plus icon"></i>
                     DODAJ PYTANIE
                 </a>
+                {% if request.user == quiz.author %}
+                <form method="POST">
+                    {% csrf_token %}
+                        <button class="ui tertiary secondary small button" type="submit" name="share">
+                            <i class="flag icon"></i>
+                            {% if quiz.is_published == True %} UKRYJ {% else %} OPUBLIKUJ {% endif %}
+                        </button>
+                </form>
+                {% endif %}
             </div>
             <h1>{{ quiz.title }}</h1>
             <form class="ui form" method="post">
@@ -34,7 +43,7 @@
                     </div>
                     <div class="ui divider"></div>
                 {% endfor %}
-                <button class="ui primary submit button" type="submit">Zatwierdź</button>
+                <button class="ui primary submit button" type="submit" name="submit">Zatwierdź</button>
             </form>
         {% endif %}
     {% else %}

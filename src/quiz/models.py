@@ -20,6 +20,15 @@ class Quiz(models.Model):
         verbose_name="Wymagana liczba punktów",
         validators=[MinValueValidator(0), MaxValueValidator(100)],
     )
+    author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        verbose_name="Autor quizu",
+    )
+    is_published = models.BooleanField(
+        verbose_name="Czy opublikowany?",
+        default=False,
+    )
 
     def __str__(self):
         return self.title

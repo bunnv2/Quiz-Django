@@ -3,7 +3,12 @@
 {% block title %}QUIZES{% endblock title %}
 
 {% block content %}
-<a class="tiny ui inverted button" href="{% url 'quiz:creator' %}"><i class="ui plus icon"></i></a>
+    <div class="ui secondary tiny menu">
+        <a class="small item" href='{% url 'quiz:creator' %}'>
+            <i class="plus icon"></i>
+            DODAJ QUIZ
+        </a>
+    </div>
     <div class="ui divider"></div>
     {% if request.user.is_authenticated %}
         <div class="ui three cards">
@@ -21,7 +26,6 @@
                     </a>
             {% endfor %}
         </div>
-
     {% else %}
         <div class="ui icon message">
             <i class="bell icon"></i>

@@ -17,10 +17,10 @@
                 {% if request.user == quiz.author %}
                 <form method="POST">
                     {% csrf_token %}
-                        <button class="ui tertiary secondary small button" type="submit" name="share">
-                            <i class="flag icon"></i>
-                            {% if quiz.is_published == True %} UKRYJ {% else %} OPUBLIKUJ {% endif %}
-                        </button>
+                    <button class="ui tertiary secondary small button" type="submit" name="share" value="{% if quiz.is_published %}True{% else %}False{% endif %}">
+                        <i class="flag icon"></i>
+                        {% if quiz.is_published == True %} UKRYJ {% else %} OPUBLIKUJ {% endif %}
+                    </button>
                 </form>
                 {% endif %}
             </div>

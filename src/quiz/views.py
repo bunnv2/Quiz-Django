@@ -1,7 +1,7 @@
 from datetime import datetime
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.core.files.base import ContentFile
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -29,7 +29,9 @@ class QuizListView(View):
         return render(request, "quiz/quizes.html", context)
 
 
-class QuizView(View):
+class QuizView(LoginRequiredMixin, View):
+    login_url = "account:log_in"
+    redirect_field_name = "quiz/quiz_view.html"
     template_name = "quiz/quiz_view.html"
     second_template_view = "quiz/results_view.html"
 
@@ -44,7 +46,7 @@ class QuizView(View):
             "quiz": quiz,
             "questions": questions,
         }
-        session, created = QuizResults.objects.get_or_create(
+        QuizResults.objects.get_or_create(
             quiz=quiz,
             user=User.objects.get(id=request.user.id),
             quiz_end=None,
@@ -56,14 +58,12 @@ class QuizView(View):
         # Check if answers are correct, sum time and display results and other statistics
 
         quiz = get_object_or_404(Quiz, pk=quiz_id)
+        share = request.POST.get("share", None)
 
-        if "share" in request.POST:
-
-            if quiz.is_published == False:
-                quiz.is_published = True
-            else:
-                quiz.is_published = False
-
+        if share is not None:
+            if quiz.author != request.user:
+                return redirect("quiz:quizes")
+            quiz.is_published = not quiz.is_published
             quiz.save()
             return redirect("quiz:quizes")
 
@@ -73,7 +73,6 @@ class QuizView(View):
             "questions": questions,
         }
 
-        # elif "submit" in request.POST:
         results = 0
         answers_selected = {}
         answers_correct = {}
@@ -115,7 +114,9 @@ class QuizView(View):
         return render(request, self.second_template_view, context)
 
 
-class QuizCreatorView(View):
+class QuizCreatorView(LoginRequiredMixin, View):
+    login_url = "account:log_in"
+    redirect_field_name = "quiz:quiz-creator"
     template_name = "quiz/quiz_creator.html"
     form_class = QuizCreationForm
 
@@ -137,7 +138,9 @@ class QuizCreatorView(View):
         return redirect(quiz.get_add_question_url())
 
 
-class QuestionCreatorView(View):
+class QuestionCreatorView(LoginRequiredMixin, View):
+    login_url = "account:log_in"
+    redirect_field_name = "quiz:question-creator"
     template_name = "quiz/question_creator.html"
     form_class = QuestionCreationForm
 

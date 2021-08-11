@@ -4,8 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls.base import reverse, reverse_lazy
 from django.utils import timezone
 from django.views import View
+from django.views.generic.edit import CreateView
 
 from .forms import QuestionCreationForm, QuizCreationForm
 from .models import Question, Quiz, QuizResults
@@ -114,28 +116,16 @@ class QuizView(LoginRequiredMixin, View):
         return render(request, self.second_template_view, context)
 
 
-class QuizCreatorView(LoginRequiredMixin, View):
-    login_url = "account:log_in"
-    redirect_field_name = "quiz:quiz-creator"
+class QuizCreatorView(LoginRequiredMixin, CreateView):
     template_name = "quiz/quiz_creator.html"
     form_class = QuizCreationForm
+    login_url = "account:log_in"
 
-    def get(self, request):
-        if not request.user.is_authenticated:
-            return render(request, "quiz/quizes.html")
-        return render(request, self.template_name, {"form": self.form_class()})
-
-    def post(self, request):
-        form = self.form_class(request.POST)
-
-        if not form.is_valid():
-            return render(request, self.template_name, {"form": form})
-
-        quiz = form.save(commit=False)
-        quiz.author = request.user
-        quiz.save()
-
-        return redirect(quiz.get_add_question_url())
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
+        return redirect(self.get_success_url())
 
 
 class QuestionCreatorView(LoginRequiredMixin, View):

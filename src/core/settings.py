@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     "debug_toolbar",
 ]
 
+LOGIN_REDIRECT_URL = "home:home"
+LOGOUT_REDIRECT_URL = "home:home"
+
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",

@@ -1,13 +1,14 @@
 from datetime import datetime
+from typing import List
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls.base import reverse, reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 
 from .forms import QuestionCreationForm, QuizCreationForm
 from .models import Question, Quiz, QuizResults
@@ -15,6 +16,24 @@ from .models import Question, Quiz, QuizResults
 
 class QuizListView(View):
     template_name = "quiz/quizes.html"
+    # model = Quiz
+
+    def get_queryset(self):
+        qs = super(QuizListView, self).get_queryset()
+        qs = Quiz.objects.filter(Q(author=self.request.user) | Q(is_published=True))
+        return super().get_queryset()
+
+    def get_context_data(self, quizes):
+
+        context = super().get_context_data()
+
+        quizes = Quiz.objects.filter(Q(author=self.request.user) | Q(is_published=True))
+
+        if self.request.user.is_superuser:
+            quizes = Quiz.objects.all()
+
+        context["quizes"] = quizes
+        return context
 
     def get(self, request):
         if not request.user.is_authenticated:
@@ -128,32 +147,20 @@ class QuizCreatorView(LoginRequiredMixin, CreateView):
         return redirect(self.get_success_url())
 
 
-class QuestionCreatorView(LoginRequiredMixin, View):
+class QuestionCreatorView(LoginRequiredMixin, CreateView):
     login_url = "account:log_in"
-    redirect_field_name = "quiz:question-creator"
     template_name = "quiz/question_creator.html"
     form_class = QuestionCreationForm
+    pk_url_kwarg = "quiz_id"
 
-    def get(self, request, quiz_id):
-        quiz = get_object_or_404(Quiz, pk=quiz_id)
-        questions = Question.objects.filter(quiz=quiz)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["quiz"] = get_object_or_404(Quiz, pk=self.kwargs[self.pk_url_kwarg])
+        context["questions"] = Question.objects.filter(quiz=context["quiz"])
+        return context
 
-        return render(
-            request,
-            self.template_name,
-            {
-                "form": self.form_class(),
-                "quiz": quiz,
-                "questions": questions,
-            },
-        )
-
-    def post(self, request, quiz_id):
-        quiz = get_object_or_404(Quiz, pk=quiz_id)
-        form = self.form_class(request.POST)
-
-        if not form.is_valid():
-            return render(request, self.template_name, {"form": form})
+    def form_valid(self, form):
+        quiz = get_object_or_404(Quiz, pk=self.kwargs[self.pk_url_kwarg])
 
         question = form.save(commit=False)
         question.quiz = quiz

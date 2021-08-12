@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 from django.views import View
 
@@ -38,11 +37,3 @@ class SignupView(View):
         )
         login(request, user)
         return redirect(self.redirect_to)
-
-
-class LoginView(LoginView, View):
-    template_name = "account/register.html"
-
-
-class LogoutView(LogoutView, View):
-    pass

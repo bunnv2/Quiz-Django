@@ -6,11 +6,11 @@ name = "pypi"
 [packages]
 django = ">=2.2,<2.3"
 django-debug-toolbar = "*"
+django-suit = {file = "https://github.com/darklow/django-suit/tarball/v2"}
 
 [dev-packages]
 pytest = "*"
 black = "==21.4b2"
-
 
 [requires]
 python_version = "3.9"

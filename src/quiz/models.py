@@ -14,10 +14,10 @@ class Quiz(models.Model):
     )
     time = models.IntegerField(
         validators=[MinValueValidator(0)],
-        verbose_name="Czas na ukończenie",
+        verbose_name="Czas na ukończenie (sek.)",
     )
     required_score_to_pass = models.IntegerField(
-        verbose_name="Wymagana liczba punktów",
+        verbose_name="Wymagany % do zdania",
         validators=[MinValueValidator(0), MaxValueValidator(100)],
     )
     author = models.ForeignKey(
@@ -92,7 +92,7 @@ class Question(models.Model):
         return 0
 
     def __str__(self):
-        return "{} {}".format(self.quiz.title, self.question)
+        return self.question
 
 
 class QuizResults(models.Model):
@@ -113,3 +113,6 @@ class QuizResults(models.Model):
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         null=True,
     )
+
+    class Meta:
+        verbose_name_plural = "Quiz results"

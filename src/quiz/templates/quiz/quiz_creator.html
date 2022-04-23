@@ -8,7 +8,7 @@
     <h2 class="ui header"> KREATOR QUIZU </h1>
     <form class="ui form" method='post'>
         {% csrf_token %}
-        {{form}}
+        {{form.as_p}}
         <button class="ui button" type="submit">Zatwierdź</button>
     </form>
 {% endblock content%}

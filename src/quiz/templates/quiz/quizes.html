@@ -1,0 +1,61 @@
+{% extends 'home/layouts/default.html' %}
+
+{% block title %}QUIZES{% endblock title %}
+
+{% block content %}
+    <div class="ui secondary tiny menu">
+        <a class="ui tertiary secondary small button" href='{% url 'quiz:creator' %}'>
+            <i class="plus icon"></i>
+            DODAJ QUIZ
+        </a>
+    </div>
+    <div class="ui divider"></div>
+    {% if request.user.is_authenticated %}
+        <div class="ui three cards">
+            {% for quiz in quizes %}
+                {% if quiz.is_published == True %}
+                    <a class="ui card" href="{{quiz.get_absolute_url}}">
+                        <div class="content">
+                            <div class="header">{{ quiz.title }}</div>
+                            <div class="meta">
+                                <span class="category">Próg procentowy zdania testu: {{ quiz.required_score_to_pass }}%</span>
+                            </div>
+                            <div class="description">
+                                <p>Czas na wykonanie quizu: {{quiz.time}} s.</p>
+                                <p>Autor: {{quiz.author}}</p>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a class="ui red card" href="{{quiz.get_absolute_url}}">
+                        <div class="content">
+                            <div class="header">{{ quiz.title }}</div>
+                            <div class="meta">
+                                <span class="category">Próg procentowy zdania testu: {{ quiz.required_score_to_pass }}%</span>
+                            </div>
+                            <div class="description">
+                                <p>Czas na wykonanie quizu: {{quiz.time}} s.</p>
+                                <p>Autor: {{quiz.author}}</p>
+                            </div>
+                            <div class="extra content">
+                                <div class="right floated author">
+                                    <i class="flag outline icon"></i> Nieopublikowany
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="ui icon message">
+            <i class="bell icon"></i>
+            <div class="content">
+                <div class="header">
+                Nie można wyświetlić quizów
+                </div>
+                <p>Musisz się najpierw zalogować, by mieć dostęp do quizów.</p>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

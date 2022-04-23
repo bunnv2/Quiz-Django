@@ -1,0 +1,14 @@
+{% extends 'home/layouts/default.html' %}
+
+
+{% block title %}QUIZ{% endblock title %}
+
+{% block content %}
+    <div class="ui divider"></div>
+    <h2 class="ui header"> KREATOR QUIZU </h1>
+    <form class="ui form" method='post'>
+        {% csrf_token %}
+        {{form}}
+        <button class="ui button" type="submit">Zatwierdź</button>
+    </form>
+{% endblock content%}

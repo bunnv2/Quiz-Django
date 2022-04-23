@@ -1,0 +1,28 @@
+body {
+    background-color:rgb(255, 255, 255);
+    margin: 2em;
+}
+
+.ui.container > h1 {
+    font-size: 3em;
+    text-align: center;
+    font-weight: normal;
+}
+
+p.info.text {
+    font-size: 1.2em;
+    text-align: center;
+    font-weight: normal;
+}
+/* ---FOOOTER--- */
+.Aligner {
+    display: flex;
+    justify-content: center;
+}
+.ui.horizantional.list.centered {
+    text-align: justify;
+    width: auto;
+    justify-items: center;
+    position: fixed;
+    display: flex;
+}
